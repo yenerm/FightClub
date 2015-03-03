@@ -3,6 +3,7 @@ package com.devchronicles.fightclub.service;
 import com.devchronicles.fightclub.model.Fighter;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,6 +15,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.enterprise.event.Event;
 
 @Stateless
 @Path("fighter")
@@ -21,6 +23,9 @@ public class FighterService {
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Inject 
+    Event<Fighter> event;
 
     @POST
     @Consumes({"application/xml", "application/json"})
@@ -31,7 +36,7 @@ public class FighterService {
         fighter.setLastname("Yener");
 
         entityManager.persist(fighter);
-
+        event.fire(fighter);
     }
 
     @DELETE
@@ -52,12 +57,13 @@ public class FighterService {
     public Fighter getFighter(@PathParam("id") Long id){
         return entityManager.find(Fighter.class, id);
     }
-//
-//    @GET
-//    @Produces({"application/xml", "application/json"})
-//    public List<Fighter> getAllFighters(){
-//        CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
-//        cq.select(cq.from(Fighter.class));
-//        return entityManager.createQuery(cq).getResultList();
-//    }
+
+    @GET
+    @Produces({"application/xml", "application/json"})
+    @javax.enterprise.inject.Produces
+    public List<Fighter> getAllFighters(){
+        CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Fighter.class));
+        return entityManager.createQuery(cq).getResultList();
+    }
 }

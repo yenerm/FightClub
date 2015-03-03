@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 //@Entity
-public class Schedule {
+public class Schedule{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
