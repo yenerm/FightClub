@@ -52,8 +52,15 @@
         <h:column>
             <f:facet name="header">
             </f:facet>
+            <h:commandLink action="#{fighterBean.updateFighter(f)}">
+                <h:outputText value="Update" />
+            </h:commandLink>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+            </f:facet>
             <h:commandLink action="#{fighterBean.removeFighter(f)}">
-                <h:outputText value="X" />
+                <h:outputText value="Delete" />
             </h:commandLink>
         </h:column>
     </h:dataTable>
