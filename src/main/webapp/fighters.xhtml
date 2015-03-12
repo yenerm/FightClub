@@ -6,8 +6,8 @@
 </head>
 <body>
     <h:messages/>
-    <h:form>
-        <h:panelGrid columns="2">
+    <h:form prependId="false">
+        <h:panelGrid id="fighterPanel" columns="2">
             <h:outputText value="Name"/>
             <h:inputText id="txt_name" value="#{fighterBean.newFighter.name}"/>
             <h:outputText value="Lastname"/>
@@ -19,10 +19,12 @@
                 <f:convertDateTime pattern="dd-MM-yyyy"/>
             </h:inputText>
         </h:panelGrid>
-        <h:commandButton id="btn_save" value="Add" action="#{fighterBean.addFighter}"/>
+        <h:commandButton id="btn_save" value="Add" action="#{fighterBean.addFighter}">
+            <f:ajax render="fighters" />
+        </h:commandButton>
     </h:form>
     <br/>
-    <h:dataTable value="#{fighterBean.fighters}" var="f" border="1">
+    <h:dataTable id="fighters" value="#{fighterBean.fighters}" var="f" border="1">
         <h:column>
             <f:facet name="header">
                 <h:outputText value="Name"/>
@@ -53,6 +55,7 @@
             <f:facet name="header">
             </f:facet>
             <h:commandLink action="#{fighterBean.updateFighter(f)}">
+                <f:ajax render="fighterPanel fighters" />
                 <h:outputText value="Update" />
             </h:commandLink>
         </h:column>
@@ -60,6 +63,7 @@
             <f:facet name="header">
             </f:facet>
             <h:commandLink action="#{fighterBean.removeFighter(f)}">
+                <f:ajax render="fighterPanel fighters" />
                 <h:outputText value="Delete" />
             </h:commandLink>
         </h:column>

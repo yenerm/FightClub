@@ -2,12 +2,14 @@ package com.devchronicles.fightclub.controller;
 
 import com.devchronicles.fightclub.model.Fighter;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +27,13 @@ public class FighterBean implements Serializable {
 
     private Set<Fighter> fighters = new HashSet<>();
     private Fighter newFighter = new Fighter();
+
+    @PostConstruct
+    public void setup() {
+        CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Fighter.class));
+        fighters = new HashSet<>(entityManager.createQuery(cq).getResultList());
+    }
 
     public String addFighter() {
         fighters.add(newFighter);
