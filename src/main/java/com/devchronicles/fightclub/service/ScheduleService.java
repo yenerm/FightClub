@@ -3,6 +3,7 @@ package com.devchronicles.fightclub.service;
 import com.devchronicles.fightclub.model.Fighter;
 import com.devchronicles.fightclub.model.Game;
 import com.devchronicles.fightclub.model.Schedule;
+
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
@@ -22,60 +23,57 @@ import javax.persistence.criteria.CriteriaQuery;
 
 @Stateless
 public class ScheduleService {
-    
+
     //@EJB
     //FighterService fighterService;
-    
+
     @Resource
     TimerService timerService;
-    
+
     @PersistenceContext
     private EntityManager entityManager;
-    
+
     @Inject
     List<Fighter> fighters;
-    
+
     @Inject
     Event<Game> lastScore;
-    
-        @Asynchronous
-	public void createSchedule(@Observes Fighter owner){
-            
-            //TODO first step
-            //List<Fighter> fighters = fighterService.getAllFighters();
-	
-            Schedule schedule=new Schedule();
-            schedule.setOwner(owner);
-            //TODO Shuffle and remove self
-            
-            entityManager.persist(schedule);
 
-            timerService.createTimer(5000, 5000, schedule.getId());
-        
+    @Asynchronous
+    public void createSchedule(@Observes Fighter owner) {
 
-	}
-        
-        @Timeout
-        public void execute(Timer timer) {
-            Long id=(Long) timer.getInfo();
-            Schedule schedule = entityManager.find(Schedule.class, id);
-            playNextMatch(schedule);
-        }
-        
-	
-        //@javax.ejb.Schedule(second="*/1", minute="*",hour="*", persistent=false)
-        
-	public void playNextMatch(Schedule schedule){
-          
-            //play next in schedule..
-            Game[] games=schedule.getGames().toArray(new Game[schedule.getGames().size()]);
-            
-            Game current = games[0];
-            schedule.getGames().remove(current);
-                     
-            lastScore.fire(current);
-	}
-	
+        //TODO first step
+        //List<Fighter> fighters = fighterService.getAllFighters();
 
-	
+        Schedule schedule = new Schedule();
+        schedule.setOwner(owner);
+        //TODO Shuffle and remove self
+
+        entityManager.persist(schedule);
+
+        timerService.createTimer(5000, 5000, schedule.getId());
+    }
+
+    @Timeout
+    public void execute(Timer timer) {
+        Long id = (Long) timer.getInfo();
+        Schedule schedule = entityManager.find(Schedule.class, id);
+        playNextMatch(schedule);
+    }
+
+
+    //@javax.ejb.Schedule(second="*/1", minute="*",hour="*", persistent=false)
+
+    public void playNextMatch(Schedule schedule) {
+
+        //play next in schedule..
+        Game[] games = schedule.getGames().toArray(new Game[schedule.getGames().size()]);
+
+        Game current = games[0];
+        schedule.getGames().remove(current);
+
+        lastScore.fire(current);
+    }
+
+
 }
