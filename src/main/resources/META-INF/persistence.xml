@@ -6,6 +6,8 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.engine.transaction.jta.platform.internal.SunOneJtaPlatform" />
     </properties>
   </persistence-unit>
 </persistence>
