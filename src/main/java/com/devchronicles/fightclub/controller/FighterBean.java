@@ -13,11 +13,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.interceptor.InvocationContext;
 
-/**
- * Created by mertcaliskan
- * on 12/03/15.
- */
 @Named
 @SessionScoped
 public class FighterBean implements Serializable {
@@ -73,4 +70,5 @@ public class FighterBean implements Serializable {
     public Fighter getNewFighter() {
         return newFighter;
     }
+
 }

@@ -39,6 +39,5 @@ public class Scoreboard {
     public void setPoints(int points) {
         this.points = points;
     }
-    
-    
+
 }
